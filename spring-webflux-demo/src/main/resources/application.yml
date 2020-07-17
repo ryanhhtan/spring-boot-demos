@@ -1,0 +1,10 @@
+# spring:
+#   security:
+#     oauth2:
+#       resourceserver:
+#         jwt:
+#           jwkSetUri: https://auth.lasfu.roro3.com/oauth/token_key
+
+logging:
+  level:
+    org.springframework.security: DEBUG
