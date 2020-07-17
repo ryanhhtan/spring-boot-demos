@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:mysql://mysql:3306/test
+    username: mysql
+    password: example 
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+  liquibase:
+    drop-first: true
+logging:
+ level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
