@@ -1,0 +1,4 @@
+driver: org.postgresql.Driver
+url: jdbc:postgresql://localhost/test?user=postgres&password=example&ssl=false
+referenceUrl: jdbc:postgresql://localhost/gendb?user=postgres&password=example&ssl=false
+changeLogFile: src/main/resources/db/changelog/db.changelog-master.yaml
