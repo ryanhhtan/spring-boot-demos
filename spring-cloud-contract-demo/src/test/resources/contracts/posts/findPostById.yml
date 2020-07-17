@@ -1,0 +1,25 @@
+name:  find post by id
+request:
+  method: GET
+  url: posts/1
+response:
+  status: 200
+  headers: 
+    Content-Type: application/json
+  body:
+    id: 1
+    title: test post title
+    content: test post content
+  matchers:
+    body:
+      - path: $.id
+        type: by_regex
+        predefined: number
+      - path: $.title
+        type: by_regex
+        predefined: non_empty
+      - path: $.content
+        type: by_regex
+        predefined: non_empty
+
+

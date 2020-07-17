@@ -1,0 +1,5 @@
+= Test Spring REST docs
+
+== Post
+create_post.adoc[Create post]
+find_post_by_id.adoc[Find post by id]

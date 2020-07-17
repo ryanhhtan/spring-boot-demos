@@ -1,0 +1,2 @@
+= Create a new post
+operation::validate_find_post_by_id[snippets='curl-request,http-request,http-response']
