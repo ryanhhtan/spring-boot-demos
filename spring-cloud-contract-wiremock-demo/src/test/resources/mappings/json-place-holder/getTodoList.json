@@ -1,0 +1,34 @@
+{
+  "request": {
+    "urlPath": "/jshs/todos",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": [
+      {
+        "completed": true,
+        "id": 198,
+        "title": "quis eius est sint explicabo",
+        "userId": 10
+      },
+      {
+        "completed": true,
+        "id": 199,
+        "title": "numquam repellendus a magnam",
+        "userId": 10
+      },
+      {
+        "completed": false,
+        "id": 200,
+        "title": "ipsam aperiam voluptates qui",
+        "userId": 10
+      }
+
+    ]
+  }
+}
+

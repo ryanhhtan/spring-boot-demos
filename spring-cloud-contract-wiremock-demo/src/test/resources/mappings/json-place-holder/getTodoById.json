@@ -1,0 +1,21 @@
+{
+  "request": {
+    "urlPattern": "/jshs/todos/([0-9]+)",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": "{{request.path.[2]}}",
+      "userId": 1,
+      "title": "random title",
+      "completed": false
+    },
+    "transformers": ["response-template"]
+
+  }
+}
+

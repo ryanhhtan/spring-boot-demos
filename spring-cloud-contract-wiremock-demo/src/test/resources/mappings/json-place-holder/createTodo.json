@@ -1,0 +1,25 @@
+{
+  "request": {
+    "urlPath": "/jshs/todos",
+    "method": "POST",
+    "bodyPatterns": [
+      {"matchesJsonPath": "$.userId"},
+      {"matchesJsonPath": "$.title"},
+      {"matchesJsonPath": "$.completed"}
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": "{{ randomValue length=10 type='NUMERIC' }}",
+      "userId": "{{jsonPath request.body '$.userId'}}",
+      "title": "{{jsonPath request.body '$.title'}}",
+      "completed": "{{ jsonPath request.body '$.completed' }}"
+    },
+    "transformers": ["response-template"]
+  }
+}
+
