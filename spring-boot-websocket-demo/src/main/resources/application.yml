@@ -1,0 +1,12 @@
+# security:
+#   oauth2:
+#     resourceserver:
+#       jwt:
+#         issuer-uri: https://auth.lasfu.roro3.com/oauth/token_key
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+service:
+  userinfo: 
+    url: https://auth.lasfu.roro3.com/userinfo
