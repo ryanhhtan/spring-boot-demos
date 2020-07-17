@@ -1,0 +1,18 @@
+type Author {
+    id: ID!
+    username: String!
+    name: String!
+    thumbnail: String
+    posts: [Post]!
+}
+ 
+# The Root Query for the application
+extend type Query {
+  authors(count: Int, offset: ID): [Author]!
+  author(id: ID!): Author
+}
+ 
+# The Root Mutation for the application
+extend type Mutation {
+    updateAuthor(name: String, thumbnail: String): Author!
+}
