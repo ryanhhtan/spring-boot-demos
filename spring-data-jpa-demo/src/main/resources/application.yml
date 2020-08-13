@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://dev-postgres.default.svc.cluster.local/demo
+    username: postgres
+    password: example 
+  jpa:
+    hibernate:
+      ddl-auto: validate
+        
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
