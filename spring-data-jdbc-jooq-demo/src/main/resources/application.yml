@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://dev-postgres.default.svc.cluster.local/demo
+    username: postgres
+    password: example 
