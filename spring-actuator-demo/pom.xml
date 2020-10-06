@@ -37,6 +37,28 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<profiles>
+		<profile>
+			<id>pipeline</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<jib.image>ryanhhtan/${project.artifactId}</jib.image>
+				<jib.allowInsecureRegistries>false</jib.allowInsecureRegistries>
+			</properties>
+		</profile>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<jib.image>localhost:32000/${project.artifactId}:registry</jib.image>
+			  <jib.allowInsecureRegistries>true</jib.allowInsecureRegistries>
+			</properties>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>
@@ -53,12 +75,16 @@
 							<image>openjdk:8-alpine</image>
 						</from>
 						<to>
-							<image>ryanhhtan/${project.artifactId}</image>
+							<image>${jib.image}</image>
 							<tags>
 								<tag>latest</tag>
 								<tag>${project.version}</tag>
 							</tags>
 						</to>
+					  <allowInsecureRegistries>${jib.allowInsecureRegistries}</allowInsecureRegistries>
+						<container>
+							<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+						</container>
 					</configuration>
 					<executions>
 						<execution>
