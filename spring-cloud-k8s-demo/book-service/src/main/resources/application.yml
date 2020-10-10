@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://dev-postgres.default.svc.cluster.local/book_service
+    username: postgres
+    password: example 
+  jpa:
+    hibernate:
+      ddl-auto: validate
+management:
+  server.port: 8081
+  endpoint.health.probes.enabled: true
+  health:
+    livenessState.enabled: true
+    readinessState.enabled: true
