@@ -23,3 +23,8 @@ profiles:
       kustomize:
         paths:
           - kustomize/local
+  - name: slow
+    deploy:
+      kustomize:
+        paths:
+          - kustomize/slow

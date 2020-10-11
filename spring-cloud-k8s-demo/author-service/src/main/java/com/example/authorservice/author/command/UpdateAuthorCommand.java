@@ -1,4 +1,4 @@
-package com.example.authorservice.author.controller.command;
+package com.example.authorservice.author.command;
 
 import javax.validation.constraints.NotNull;
 import lombok.Data;

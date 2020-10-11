@@ -1,4 +1,4 @@
-package com.example.authorservice.author.controller.command;
+package com.example.authorservice.author.command;
 
 import com.example.authorservice.author.model.Author;
 import lombok.Data;

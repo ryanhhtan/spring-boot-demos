@@ -13,7 +13,7 @@ import lombok.Setter;
  * Author
  */
 @Entity
-@Table(name = "authorservice_authors")
+@Table(name = "authors")
 @Getter
 public class Author {
 	Author() {
