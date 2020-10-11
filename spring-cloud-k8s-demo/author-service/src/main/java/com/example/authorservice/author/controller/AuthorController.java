@@ -40,7 +40,7 @@ public class AuthorController {
 	}
 
 	@GetMapping
-	public List<AuthorView> findAll(@RequestParam Map<String, String> queryParams) {
+	public List<AuthorView> findAll(@RequestParam Map<String, String> queryParams) throws Exception {
 		return service.findAll(queryParams);
 	}
 

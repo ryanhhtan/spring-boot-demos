@@ -34,7 +34,7 @@ public class DefaultAuthorService implements AuthorService {
 	}
 
 	@Override
-	public List<AuthorView > findAll(final Map<String, String> queryParams) {
+	public List<AuthorView > findAll(final Map<String, String> queryParams) throws Exception{
 		return repository.findAll(AuthorSpec.query(queryParams)).stream().map(AuthorView ::new)
 				.collect(Collectors.toList());
 	}

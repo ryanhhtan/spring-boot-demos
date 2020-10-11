@@ -13,7 +13,7 @@ import com.example.authorservice.author.exception.AuthorNotFoundException;
 */
 public interface AuthorService {
 	public AuthorView  createAuthor(final CreateAuthorCommand command);
-	public List<AuthorView > findAll(final Map<String, String> queryParams);
+	public List<AuthorView > findAll(final Map<String, String> queryParams) throws Exception;
 	public AuthorView  findById(final Long id) throws AuthorNotFoundException;
 	public AuthorView  updateAuthor(UpdateAuthorCommand command) throws AuthorNotFoundException;
 	public void deleteById(final DeleteAuthorCommand command);

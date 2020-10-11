@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import com.example.authorservice.author.exception.QueryParamNotSupportedException;
 import com.example.authorservice.author.model.Author;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -32,17 +34,25 @@ public class AuthorSpec {
 		return String.format("%s%s%s", "%", input, "%");
 	}
 
-	public static Specification<Author> query(Map<String, String> queryParams) {
+	public static Specification<Author> query(Map<String, String> queryParams) throws Exception {
 		if (Objects.isNull(specs)) {
 			initSpecs();
 		}
-		return queryParams.keySet().stream().map(
-				param -> specs.getOrDefault(param, AuthorSpec::unspecified).apply(queryParams.get(param)))
+		if (!specs.keySet().containsAll(queryParams.keySet())) {
+			final Set<String> notSupportParams = queryParams.keySet();
+			notSupportParams.removeAll(specs.keySet());
+			final String notSupportParamsString = notSupportParams.stream().reduce(null,
+					(acc, cur) -> Objects.isNull(acc) ? cur : acc.concat(", ").concat(cur));
+			throw new QueryParamNotSupportedException(
+					"query parameter(s) not supported: " + notSupportParamsString);
+		}
+		return queryParams.keySet().stream()
+				.map(param -> specs.getOrDefault(param, AuthorSpec::noMatch).apply(queryParams.get(param)))
 				.reduce(null, (acc, cur) -> Objects.isNull(acc) ? cur : acc.and(cur));
 	}
 
 
-	public static Specification<Author> unspecified(final String param) {
+	public static Specification<Author> noMatch(final String param) {
 		return null;
 	}
 
