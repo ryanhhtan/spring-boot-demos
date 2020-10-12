@@ -1,0 +1,30 @@
+apiVersion: skaffold/v2beta8
+kind: Config
+metadata:
+  name: book-service
+build:
+  tagPolicy:
+    sha256: {}
+  artifacts:
+  - image: localhost:32000/book-service
+    custom:
+      buildCommand: ./mvnw spring-boot:build-image && docker push $IMAGE
+      dependencies:
+        paths:
+          - pom.xml
+          - src
+deploy:
+  kustomize:
+    paths: 
+    - kustomize/base
+profiles:
+  - name: local
+    deploy:
+      kustomize:
+        paths:
+          - kustomize/local
+  - name: slow
+    deploy:
+      kustomize:
+        paths:
+          - kustomize/slow

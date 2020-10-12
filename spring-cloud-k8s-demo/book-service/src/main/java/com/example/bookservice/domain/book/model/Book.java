@@ -1,6 +1,7 @@
-package com.example.bookservice.book.model;
+package com.example.bookservice.domain.book.model;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import com.example.bookservice.book.exdata.model.Author;
+import com.example.bookservice.domain.author.model.Author;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -40,7 +41,7 @@ public class Book {
 	private String title;
 
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<AuthorRef> authorRefs;
+	private Set<AuthorRef> authorRefs = new HashSet<>();
 
 	public Book addAuthor(final Author author) {
 		assert Objects.nonNull(author.getId()) : "author.id cannot be null";

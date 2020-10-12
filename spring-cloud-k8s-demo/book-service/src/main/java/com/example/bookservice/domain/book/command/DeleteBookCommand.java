@@ -1,4 +1,4 @@
-package com.example.bookservice.book.command;
+package com.example.bookservice.domain.book.command;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

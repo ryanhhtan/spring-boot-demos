@@ -1,11 +1,11 @@
-package com.example.bookservice.book.controller;
+package com.example.bookservice.domain.book.controller;
 
 import java.util.List;
-import com.example.bookservice.book.command.CreateBookCommand;
-import com.example.bookservice.book.command.DeleteBookCommand;
-import com.example.bookservice.book.command.UpdateBookCommand;
-import com.example.bookservice.book.query.BookView;
-import com.example.bookservice.book.service.BookService;
+import com.example.bookservice.domain.book.command.CreateBookCommand;
+import com.example.bookservice.domain.book.command.DeleteBookCommand;
+import com.example.bookservice.domain.book.command.UpdateBookCommand;
+import com.example.bookservice.domain.book.query.BookView;
+import com.example.bookservice.domain.book.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;

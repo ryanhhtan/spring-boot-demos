@@ -1,10 +1,10 @@
-package com.example.bookservice.book.service;
+package com.example.bookservice.domain.book.service;
 
 import java.util.List;
-import com.example.bookservice.book.command.CreateBookCommand;
-import com.example.bookservice.book.command.DeleteBookCommand;
-import com.example.bookservice.book.command.UpdateBookCommand;
-import com.example.bookservice.book.query.BookView;
+import com.example.bookservice.domain.book.command.CreateBookCommand;
+import com.example.bookservice.domain.book.command.DeleteBookCommand;
+import com.example.bookservice.domain.book.command.UpdateBookCommand;
+import com.example.bookservice.domain.book.query.BookView;
 
 /**
 * BookeService

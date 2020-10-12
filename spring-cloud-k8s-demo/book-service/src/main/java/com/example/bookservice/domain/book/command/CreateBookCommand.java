@@ -1,7 +1,8 @@
-package com.example.bookservice.book.command;
+package com.example.bookservice.domain.book.command;
 
 import java.util.Set;
 import javax.validation.constraints.NotNull;
+import com.example.bookservice.domain.author.model.Author;
 import lombok.Data;
 
 /**
@@ -11,5 +12,5 @@ import lombok.Data;
 public class CreateBookCommand {
 	@NotNull
 	private String title;
-	private Set<Long> authorRefs;
+	private Set<Author> authors;
 }

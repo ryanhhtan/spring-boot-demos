@@ -1,7 +1,8 @@
-package com.example.bookservice.book.exdata.resolver;
+package com.example.bookservice.domain.author.resolver;
+
 
 import java.util.Collection;
-import com.example.bookservice.book.exdata.model.Author;
+import com.example.bookservice.domain.author.model.Author;
 
 /**
  * AuthorResolver

@@ -1,4 +1,4 @@
-package com.example.bookservice.book.model;
+package com.example.bookservice.domain.book.model;
 
 /**
 * BookFactor

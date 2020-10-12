@@ -1,4 +1,4 @@
-package com.example.bookservice.book.exception;
+package com.example.bookservice.domain.book.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
