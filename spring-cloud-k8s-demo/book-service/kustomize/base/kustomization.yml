@@ -1,6 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+generatorOptions:
+  disableNameSuffixHash: true
+
 resources:
 - service.yml
 - deployment.yml
+
+configMapGenerator:
+  - name: book-service
+    behavior: create
+    files:
+      - application.yml

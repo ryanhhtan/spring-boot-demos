@@ -1,4 +1,4 @@
-package com.example.authorservice.author.spec;
+package com.example.authorservice.domain.author.spec;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,8 +8,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import com.example.authorservice.author.exception.QueryParamNotSupportedException;
-import com.example.authorservice.author.model.Author;
+import com.example.authorservice.domain.author.exception.QueryParamNotSupportedException;
+import com.example.authorservice.domain.author.model.Author;
 import org.springframework.data.jpa.domain.Specification;
 
 /**

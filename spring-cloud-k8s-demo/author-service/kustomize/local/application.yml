@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: author-service
+  datasource:
+    url: jdbc:postgresql://dev-postgres/author_service
+    username: postgres
+    password: example 

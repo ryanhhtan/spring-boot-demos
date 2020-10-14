@@ -1,14 +1,15 @@
-package com.example.authorservice.author.controller;
+package com.example.authorservice.domain.author.controller;
 
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
-import com.example.authorservice.author.command.CreateAuthorCommand;
-import com.example.authorservice.author.command.DeleteAuthorCommand;
-import com.example.authorservice.author.command.UpdateAuthorCommand;
-import com.example.authorservice.author.query.AuthorView ;
-import com.example.authorservice.author.exception.AuthorNotFoundException;
-import com.example.authorservice.author.service.AuthorService;
+import com.example.authorservice.domain.author.command.CreateAuthorCommand;
+import com.example.authorservice.domain.author.command.DeleteAuthorCommand;
+import com.example.authorservice.domain.author.command.UpdateAuthorCommand;
+import com.example.authorservice.domain.author.query.AuthorView ;
+import com.example.authorservice.domain.author.exception.AuthorNotFoundException;
+import com.example.authorservice.domain.author.service.AuthorService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/authors")
 public class AuthorController {
 
+	@Lazy
 	private final AuthorService service;
 
 	@PostMapping

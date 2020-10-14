@@ -1,4 +1,4 @@
-package com.example.authorservice.author.exception;
+package com.example.authorservice.domain.author.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

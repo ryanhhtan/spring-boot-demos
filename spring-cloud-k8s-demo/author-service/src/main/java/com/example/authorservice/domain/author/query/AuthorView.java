@@ -1,6 +1,6 @@
-package com.example.authorservice.author.query;
+package com.example.authorservice.domain.author.query;
 
-import com.example.authorservice.author.model.Author;
+import com.example.authorservice.domain.author.model.Author;
 
 /**
 * AuthorBasicView

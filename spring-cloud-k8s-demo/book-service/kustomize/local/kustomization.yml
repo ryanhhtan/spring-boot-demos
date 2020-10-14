@@ -2,13 +2,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- service.yml
-- deployment.yml
+  - ../base
 
 generatorOptions:
   disableNameSuffixHash: true
 
+patchesStrategicMerge:
+  - enable_local_profile.yml
+
 configMapGenerator:
-  - name: author-service
+  - name: book-service-local
     files:
       - application.yml

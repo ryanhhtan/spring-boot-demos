@@ -1,4 +1,4 @@
-package com.example.authorservice.author.command;
+package com.example.authorservice.domain.author.command;
 
 import javax.validation.constraints.NotNull;
 import lombok.Data;

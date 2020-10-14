@@ -8,7 +8,7 @@ build:
   artifacts:
   - image: localhost:32000/book-service
     custom:
-      buildCommand: ./mvnw spring-boot:build-image && docker push $IMAGE
+      buildCommand: ./mvnw spring-boot:build-image -DskipTests=true && docker push $IMAGE
       dependencies:
         paths:
           - pom.xml

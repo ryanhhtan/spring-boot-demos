@@ -1,6 +1,6 @@
-package com.example.authorservice.author.command;
+package com.example.authorservice.domain.author.command;
 
-import com.example.authorservice.author.model.Author;
+import com.example.authorservice.domain.author.model.Author;
 import lombok.Data;
 
 /**

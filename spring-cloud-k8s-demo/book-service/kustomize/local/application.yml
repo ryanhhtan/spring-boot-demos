@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://dev-postgres/book_service
+    username: postgres
+    password: example 

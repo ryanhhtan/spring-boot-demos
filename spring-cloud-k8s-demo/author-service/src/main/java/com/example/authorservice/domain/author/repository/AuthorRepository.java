@@ -1,6 +1,6 @@
-package com.example.authorservice.author.repository;
+package com.example.authorservice.domain.author.repository;
 
-import com.example.authorservice.author.model.Author;
+import com.example.authorservice.domain.author.model.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

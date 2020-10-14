@@ -1,4 +1,4 @@
-package com.example.authorservice.author.model;
+package com.example.authorservice.domain.author.model;
 
 /**
 * AuthorFactory

@@ -1,4 +1,4 @@
-package com.example.authorservice.author.model;
+package com.example.authorservice.domain.author.model;
 
 import java.util.Objects;
 import javax.persistence.Entity;
