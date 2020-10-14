@@ -1,6 +1,7 @@
 package com.example.bookservice.domain.book.controller;
 
 import java.util.List;
+import java.util.Map;
 import com.example.bookservice.domain.book.command.CreateBookCommand;
 import com.example.bookservice.domain.book.command.DeleteBookCommand;
 import com.example.bookservice.domain.book.command.UpdateBookCommand;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +38,8 @@ public class BookController {
 	}
 
 	@GetMapping
-	public List<BookView> findAll() {
-		return service.findAll();
+	public List<BookView> findAll(@RequestParam(required = false) Map<String, String> queryParams) {
+		return service.findAll(queryParams);
 	}
 
 	@GetMapping("/{id}")

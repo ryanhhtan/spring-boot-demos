@@ -1,7 +1,7 @@
 package com.example.bookservice.domain.book.command;
 
 import java.util.Set;
-import javax.validation.constraints.NotBlank;
+import com.example.bookservice.domain.author.model.Author;
 import lombok.Data;
 
 /**
@@ -11,8 +11,7 @@ import lombok.Data;
 public class UpdateBookCommand {
 	private Long id;
 
-	@NotBlank
 	private String title;
 
-	private Set<Long> authorIds;
+	private Set<Author> authors;
 }

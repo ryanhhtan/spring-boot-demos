@@ -1,6 +1,7 @@
 package com.example.bookservice.domain.book.query;
 
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import com.example.bookservice.domain.author.model.Author;
@@ -20,7 +21,7 @@ import lombok.Data;
 public class BookView {
 
 	@JsonIgnore
-	private AuthorResolver authorResolver;
+	private final AuthorResolver authorResolver;
 
 	private Long id;
 
@@ -31,17 +32,18 @@ public class BookView {
 
 	private Set<Author> authors;
 
-	public BookView(final Book book, final AuthorResolver authorResolver) {
+	BookView(final Book book, final Set<Author> authors, final AuthorResolver authorResolver) {
 		BeanUtils.copyProperties(book, this);
+		this.authors = authors;
 		this.authorResolver = authorResolver;
-		this.setAuthors(authorRefs.stream().map(it -> new Author().setId(it.getAuthorId()))
-				.collect(Collectors.toSet()));
 	}
 
 	public BookView withAuthors() {
+		assert Objects.nonNull(authorResolver) : "no proper author resolver specified";
 		this.setAuthors(authorResolver
 				.findById(authorRefs.stream().map(AuthorRef::getAuthorId).collect(Collectors.toSet()))
 				.stream().collect(Collectors.toSet()));
 		return this;
 	}
+
 }

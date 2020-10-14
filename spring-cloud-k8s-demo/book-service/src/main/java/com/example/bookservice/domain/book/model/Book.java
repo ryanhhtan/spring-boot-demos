@@ -71,4 +71,9 @@ public class Book {
 		return this;
 	}
 
+	public Book deleteAllAuthors() {
+		authorRefs.clear();
+		return this;
+	}
+
 }
