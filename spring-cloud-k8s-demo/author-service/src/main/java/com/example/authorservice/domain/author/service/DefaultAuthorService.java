@@ -13,6 +13,7 @@ import com.example.authorservice.domain.author.model.AuthorFactory;
 import com.example.authorservice.domain.author.repository.AuthorRepository;
 import com.example.authorservice.domain.author.spec.AuthorSpec;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DefaultAuthorService implements AuthorService {
 	private final AuthorRepository repository;
+	private final StreamBridge streamBridge;
 
 	@Override
 	public AuthorView  createAuthor(CreateAuthorCommand command) {
