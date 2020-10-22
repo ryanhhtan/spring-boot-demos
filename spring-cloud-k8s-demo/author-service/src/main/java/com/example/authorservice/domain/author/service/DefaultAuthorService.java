@@ -13,20 +13,16 @@ import com.example.authorservice.domain.author.model.AuthorFactory;
 import com.example.authorservice.domain.author.repository.AuthorRepository;
 import com.example.authorservice.domain.author.spec.AuthorSpec;
 import org.springframework.beans.BeanUtils;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * AuthorServiceImpl
  */
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DefaultAuthorService implements AuthorService {
 	private final AuthorRepository repository;
-	private final StreamBridge streamBridge;
 
 	@Override
 	public AuthorView  createAuthor(CreateAuthorCommand command) {
@@ -48,7 +44,6 @@ public class DefaultAuthorService implements AuthorService {
 
 	@Override
 	public AuthorView  updateAuthor(UpdateAuthorCommand command) throws AuthorNotFoundException {
-		log.info("*** command: {}", command);
 		final Author author = repository.findById(command.getId()).orElseThrow(this::authorNotFound);
 		BeanUtils.copyProperties(command, author, "id");
 		final Author updated = repository.save(author);

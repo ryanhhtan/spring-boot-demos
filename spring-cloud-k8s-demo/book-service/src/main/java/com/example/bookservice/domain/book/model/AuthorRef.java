@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
 * AuthorRef
@@ -18,6 +19,7 @@ import lombok.Data;
 @IdClass(AuthorRef.ID.class)
 @Table(name = "author_refs")
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AuthorRef {
 	AuthorRef(){}
 	@Id
@@ -25,6 +27,7 @@ public class AuthorRef {
 	@JsonIgnore
 	private Book book;
 	@Id
+  @EqualsAndHashCode.Include
 	private Long authorId;
 
 	@Data
