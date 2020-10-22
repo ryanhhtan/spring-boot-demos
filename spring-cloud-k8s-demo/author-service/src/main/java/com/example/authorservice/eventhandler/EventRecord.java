@@ -1,11 +1,11 @@
-package com.example.authorservice.domain.author.events;
+package com.example.authorservice.eventhandler;
 
 import java.time.Instant;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import com.example.authorservice.eventhandler.BaseEvent;
+import javax.persistence.Table;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 
@@ -14,11 +14,12 @@ import lombok.Getter;
  */
 @Entity
 @Getter
-public class DomainEventRecord {
+@Table(name = "event_records")
+public class EventRecord {
   private static final ObjectMapper mapper = new ObjectMapper();
 
-  DomainEventRecord(){}
-  public DomainEventRecord(BaseEvent<?> event) {
+  EventRecord(){}
+  public EventRecord(BaseEvent<?> event) {
     this.event = event.getClass().getSimpleName();
     this.occuredAt = event.getOccuredAt();
     try {

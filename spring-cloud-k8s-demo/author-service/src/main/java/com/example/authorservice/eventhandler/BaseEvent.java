@@ -1,4 +1,4 @@
-package com.example.authorservice.domain.author.events;
+package com.example.authorservice.eventhandler;
 
 import java.time.Instant;
 import org.springframework.context.ApplicationEvent;
@@ -16,6 +16,7 @@ public abstract class BaseEvent <T>  extends ApplicationEvent{
 
   public BaseEvent(Object source) {
     super(source);
+    occuredAt = Instant.now();
   }
   
 }

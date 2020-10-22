@@ -1,4 +1,4 @@
-package com.example.authorservice.domain.author.events;
+package com.example.authorservice.eventhandler;
 
 
 /**

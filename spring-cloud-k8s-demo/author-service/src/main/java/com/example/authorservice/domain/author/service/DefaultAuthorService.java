@@ -6,13 +6,22 @@ import java.util.stream.Collectors;
 import com.example.authorservice.domain.author.command.CreateAuthorCommand;
 import com.example.authorservice.domain.author.command.DeleteAuthorCommand;
 import com.example.authorservice.domain.author.command.UpdateAuthorCommand;
+import com.example.authorservice.domain.author.events.AuthorCreated;
+import com.example.authorservice.domain.author.events.AuthorDeleted;
+import com.example.authorservice.domain.author.events.AuthorUpdated;
+import com.example.authorservice.domain.author.events.CreateAuthorCommandReceived;
+import com.example.authorservice.domain.author.events.DeleteAuthorCommandReceived;
+import com.example.authorservice.domain.author.events.UpdateAuthorCommandReceived;
 import com.example.authorservice.domain.author.query.AuthorView ;
 import com.example.authorservice.domain.author.exception.AuthorNotFoundException;
 import com.example.authorservice.domain.author.model.Author;
 import com.example.authorservice.domain.author.model.AuthorFactory;
 import com.example.authorservice.domain.author.repository.AuthorRepository;
 import com.example.authorservice.domain.author.spec.AuthorSpec;
+import com.example.authorservice.eventhandler.OutgoingEvent;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -23,11 +32,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DefaultAuthorService implements AuthorService {
 	private final AuthorRepository repository;
+	private final StreamBridge streamBridge;
+	private final ApplicationEventPublisher publisher;
+	private String destination = "author-service-author-domain-events"; 
 
 	@Override
 	public AuthorView  createAuthor(CreateAuthorCommand command) {
+		final CreateAuthorCommandReceived commandReceived = new CreateAuthorCommandReceived(command);
+		publisher.publishEvent(commandReceived);
 		final Author author = AuthorFactory.createAuthor(command.getName());
 		final Author saved = repository.save(author);
+		final AuthorCreated authorCreated = new AuthorCreated(saved);
+		final OutgoingEvent event = new OutgoingEvent(authorCreated);
+		streamBridge.send(destination, event);
+		publisher.publishEvent(authorCreated);
 		return new AuthorView (saved);
 	}
 
@@ -44,9 +62,16 @@ public class DefaultAuthorService implements AuthorService {
 
 	@Override
 	public AuthorView  updateAuthor(UpdateAuthorCommand command) throws AuthorNotFoundException {
+		final UpdateAuthorCommandReceived commandReceived = new UpdateAuthorCommandReceived(command);
+		publisher.publishEvent(commandReceived);
 		final Author author = repository.findById(command.getId()).orElseThrow(this::authorNotFound);
 		BeanUtils.copyProperties(command, author, "id");
 		final Author updated = repository.save(author);
+
+		final AuthorUpdated authorUpdated = new AuthorUpdated (updated);
+		final OutgoingEvent event = new OutgoingEvent(authorUpdated);
+		streamBridge.send(destination, event);
+		publisher.publishEvent(authorUpdated);
 		return new AuthorView (updated);
 	}
 
@@ -56,6 +81,13 @@ public class DefaultAuthorService implements AuthorService {
 
 	@Override
 	public void deleteById(DeleteAuthorCommand command) {
+		final DeleteAuthorCommandReceived commandReceived = new DeleteAuthorCommandReceived(command);
+		publisher.publishEvent(commandReceived);
+		final Author author = repository.findById(command.getId()).orElseThrow(this::authorNotFound);
 		repository.deleteById(command.getId());
+		final AuthorDeleted authorDeleted = new AuthorDeleted(author);
+		final OutgoingEvent event = new OutgoingEvent(authorDeleted);
+		streamBridge.send(destination, event);
+		publisher.publishEvent(authorDeleted);
 	}
 }

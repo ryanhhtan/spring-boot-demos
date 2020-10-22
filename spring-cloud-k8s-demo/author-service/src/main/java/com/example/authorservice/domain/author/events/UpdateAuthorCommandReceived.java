@@ -1,6 +1,7 @@
 package com.example.authorservice.domain.author.events;
 
 import com.example.authorservice.domain.author.command.UpdateAuthorCommand;
+import com.example.authorservice.eventhandler.CommandEvent;
 
 /**
  * UpdateAuthorCommandReceived

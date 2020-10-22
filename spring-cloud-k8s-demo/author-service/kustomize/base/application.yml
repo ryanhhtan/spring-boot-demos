@@ -6,6 +6,10 @@ spring:
     url: jdbc:postgresql://prod-postgres/author_service
     username: postgres
     password: example 
+  cloud.stream:
+    kafka.binder.brokers:
+    - dev-kafka
+
 server.error.include-message: always
 management:
   server.port: 8081
@@ -13,3 +17,4 @@ management:
   health:
     livenessState.enabled: true
     readinessState.enabled: true
+
