@@ -7,14 +7,18 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+import com.example.bookservice.common.WithId;
+import com.example.bookservice.common.event.OutGoingMessage;
+import com.example.bookservice.domain.author.model.Author;
+import com.example.bookservice.domain.author.resolver.AuthorResolver;
 import com.example.bookservice.domain.book.command.CreateBookCommand;
 import com.example.bookservice.domain.book.command.DeleteBookCommand;
 import com.example.bookservice.domain.book.command.UpdateBookCommand;
-import com.example.bookservice.common.WithId;
+import com.example.bookservice.domain.book.event.BookCreated;
+import com.example.bookservice.domain.book.event.BookDeleted;
+import com.example.bookservice.domain.book.event.BookUpdated;
 import com.example.bookservice.domain.book.exception.AuthorNotExistException;
 import com.example.bookservice.domain.book.exception.BookNotFoundException;
-import com.example.bookservice.domain.author.model.Author;
-import com.example.bookservice.domain.author.resolver.AuthorResolver;
 import com.example.bookservice.domain.book.model.Book;
 import com.example.bookservice.domain.book.model.BookFactory;
 import com.example.bookservice.domain.book.query.BookView;
@@ -22,27 +26,31 @@ import com.example.bookservice.domain.book.query.BookViewFactory;
 import com.example.bookservice.domain.book.repository.BookRepository;
 import com.example.bookservice.domain.book.spec.BookSpec;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * DefaultBookService
  */
 @Service
 @RequiredArgsConstructor
-@Slf4j
 @Transactional
 public class DefaultBookService implements BookService {
+  private static final String topic = "book-service-book-domain-events";
 
 	private final BookRepository repository;
 
 	private final AuthorResolver authorResolver;
 
+  private final StreamBridge streamBridge;
+
+  private final ApplicationEventPublisher publisher;
+
 	@Override
 	public BookView createBook(CreateBookCommand command) throws Exception {
-		log.info("*** create book command: {}", command);
 		final Book book = BookFactory.createBook(command.getTitle());
 		final Set<Author> maybeAuthors = command.getAuthors();
 		final Set<Author> actualAuthors = new HashSet<>();
@@ -56,6 +64,9 @@ public class DefaultBookService implements BookService {
 			book.addAuthors(actualAuthors);
 		}
 		final Book saved = repository.save(book);
+    final BookCreated bookCreated = new BookCreated(saved);
+    streamBridge.send(topic,new OutGoingMessage(bookCreated));
+    publisher.publishEvent(bookCreated);
 		return BookViewFactory.instance().createBookView(saved, actualAuthors);
 	}
 
@@ -93,16 +104,41 @@ public class DefaultBookService implements BookService {
 			}
 		}
 		final Book updated = repository.save(book);
+    final BookUpdated bookUpdated = new BookUpdated(updated);
+    streamBridge.send(topic,new OutGoingMessage(bookUpdated));
+    publisher.publishEvent(bookUpdated);
 		return BookViewFactory.instance().createBookView(updated, actualAuthors);
 	}
 
 	@Override
 	public void deleteBook(DeleteBookCommand command) {
+    final Book book = repository.findById(command.getId()).orElseThrow(this::notFound);
 		repository.deleteById(command.getId());
+    final BookDeleted bookDeleted = new BookDeleted(book);
+    streamBridge.send(topic, new OutGoingMessage(bookDeleted));
+    publisher.publishEvent(bookDeleted);
 	}
 
 	public BookNotFoundException notFound() {
 		return new BookNotFoundException();
 	}
+
+  // @Bean
+  // public Consumer<OutGoingMessage> handleAuthorEvent() {
+    // return message -> log.info("*** author events: {}", message);
+    // return message -> {
+    //   log.info("*** received message: {}", message);
+    //   if (message.getEvent().equals("AuthorDeleted")) {
+    //     final Long authorId = Long.valueOf(message.getId());
+    //     final List<Book> booksWithDeletedAuthor = repository.findByAuthorId(authorId);
+    //     booksWithDeletedAuthor.stream().forEach(book -> {
+    //       book.deleteAuthor(new Author().setId(authorId));
+    //       final BookUpdated bookUpdated = new BookUpdated(book);
+    //       streamBridge.send(topic, new OutGoingMessage(bookUpdated));
+    //       publisher.publishEvent(bookUpdated);
+    //     });
+    //   }
+    // };
+  // }
 }
 

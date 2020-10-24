@@ -1,6 +1,8 @@
 package com.example.bookservice.domain.book.command;
 
+import com.example.bookservice.common.event.Command;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -8,6 +10,7 @@ import lombok.experimental.Accessors;
 */
 @Data
 @Accessors(chain = true)
-public class DeleteBookCommand {
+@EqualsAndHashCode(callSuper = false)
+public class DeleteBookCommand extends Command {
 	private Long id;
 }

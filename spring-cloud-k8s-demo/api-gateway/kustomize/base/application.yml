@@ -3,13 +3,13 @@ spring:
     gateway:
       routes:
       - id: author_route
-        uri: http://author-service.default.svc.cluster.local/authors
+        uri: http://author-service/authors
         predicates:
-        - Path=/authors**
+        - Path=/authors/**
       - id: book_route
-        uri: http://book-service.default.svc.cluster.local/authors
+        uri: http://book-service/books
         predicates:
-        - Path=/books**
+        - Path=/books/**
 management:
   server.port: 8081
   endpoint.health.probes.enabled: true

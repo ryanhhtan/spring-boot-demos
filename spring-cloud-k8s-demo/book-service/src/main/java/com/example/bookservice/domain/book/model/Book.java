@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import com.example.bookservice.common.event.Domain;
 import com.example.bookservice.domain.author.model.Author;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +26,7 @@ import lombok.experimental.Accessors;
 @Entity
 @Accessors(chain = true)
 @Table(name = "books")
-public class Book {
+public class Book extends Domain {
 	Book() {
 	}
 
@@ -50,7 +51,6 @@ public class Book {
 	}
 
 	public Book deleteAuthor(final Author author) {
-		assert Objects.nonNull(author.getId()) : "author.id cannot be null";
 		authorRefs.remove(new AuthorRef(this, author.getId()));
 		return this;
 	}
