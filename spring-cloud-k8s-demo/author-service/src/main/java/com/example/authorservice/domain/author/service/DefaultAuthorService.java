@@ -34,7 +34,7 @@ public class DefaultAuthorService implements AuthorService {
 	private final AuthorRepository repository;
 	private final StreamBridge streamBridge;
 	private final ApplicationEventPublisher publisher;
-	private String destination = "author-service-author-domain-events"; 
+	private String authorEventBinding = "sendAuthorEvent-out-0"; 
 
 	@Override
 	public AuthorView  createAuthor(CreateAuthorCommand command) {
@@ -44,7 +44,7 @@ public class DefaultAuthorService implements AuthorService {
 		final Author saved = repository.save(author);
 		final AuthorCreated authorCreated = new AuthorCreated(saved);
 		final OutgoingEvent event = new OutgoingEvent(authorCreated);
-		streamBridge.send(destination, event);
+		streamBridge.send(authorEventBinding, event);
 		publisher.publishEvent(authorCreated);
 		return new AuthorView (saved);
 	}
@@ -70,7 +70,7 @@ public class DefaultAuthorService implements AuthorService {
 
 		final AuthorUpdated authorUpdated = new AuthorUpdated (updated);
 		final OutgoingEvent event = new OutgoingEvent(authorUpdated);
-		streamBridge.send(destination, event);
+		streamBridge.send(authorEventBinding, event);
 		publisher.publishEvent(authorUpdated);
 		return new AuthorView (updated);
 	}
@@ -87,7 +87,7 @@ public class DefaultAuthorService implements AuthorService {
 		repository.deleteById(command.getId());
 		final AuthorDeleted authorDeleted = new AuthorDeleted(author);
 		final OutgoingEvent event = new OutgoingEvent(authorDeleted);
-		streamBridge.send(destination, event);
+		streamBridge.send(authorEventBinding, event);
 		publisher.publishEvent(authorDeleted);
 	}
 }

@@ -7,6 +7,13 @@ spring:
     username: postgres
     password: example 
   cloud.stream:
+    source: sendAuthorEvent
+    bindings: 
+      sendAuthorEvent-out-0:
+        destination: author-service-author-domain-events
+    bidings:
+      authorDomainEvent:
+        destination: author-service-author-domain-events
     kafka.binder.brokers:
     - dev-kafka
 

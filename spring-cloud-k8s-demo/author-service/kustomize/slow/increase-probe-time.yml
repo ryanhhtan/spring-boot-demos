@@ -8,8 +8,8 @@ spec:
       containers:
         - name: author-service
           readinessProbe:
-            initialDelaySeconds: 40
-            periodSeconds: 3
+            initialDelaySeconds: 50 
+            periodSeconds: 5
           livenessProbe:
-            initialDelaySeconds: 40
-            periodSeconds: 3
+            initialDelaySeconds: 50
+            periodSeconds: 5
