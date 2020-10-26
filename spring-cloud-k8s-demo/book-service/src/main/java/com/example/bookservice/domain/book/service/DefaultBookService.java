@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import com.example.bookservice.common.WithId;
@@ -28,9 +29,11 @@ import com.example.bookservice.domain.book.spec.BookSpec;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * DefaultBookService
@@ -38,8 +41,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class DefaultBookService implements BookService {
-  private static final String topic = "book-service-book-domain-events";
+  private static final String bookEventBinding = "sendBookEvent";
 
 	private final BookRepository repository;
 
@@ -65,7 +69,7 @@ public class DefaultBookService implements BookService {
 		}
 		final Book saved = repository.save(book);
     final BookCreated bookCreated = new BookCreated(saved);
-    streamBridge.send(topic,new OutGoingMessage(bookCreated));
+    streamBridge.send(bookEventBinding,new OutGoingMessage(bookCreated));
     publisher.publishEvent(bookCreated);
 		return BookViewFactory.instance().createBookView(saved, actualAuthors);
 	}
@@ -105,7 +109,7 @@ public class DefaultBookService implements BookService {
 		}
 		final Book updated = repository.save(book);
     final BookUpdated bookUpdated = new BookUpdated(updated);
-    streamBridge.send(topic,new OutGoingMessage(bookUpdated));
+    streamBridge.send(bookEventBinding,new OutGoingMessage(bookUpdated));
     publisher.publishEvent(bookUpdated);
 		return BookViewFactory.instance().createBookView(updated, actualAuthors);
 	}
@@ -115,7 +119,7 @@ public class DefaultBookService implements BookService {
     final Book book = repository.findById(command.getId()).orElseThrow(this::notFound);
 		repository.deleteById(command.getId());
     final BookDeleted bookDeleted = new BookDeleted(book);
-    streamBridge.send(topic, new OutGoingMessage(bookDeleted));
+    streamBridge.send(bookEventBinding, new OutGoingMessage(bookDeleted));
     publisher.publishEvent(bookDeleted);
 	}
 
@@ -123,9 +127,9 @@ public class DefaultBookService implements BookService {
 		return new BookNotFoundException();
 	}
 
-  // @Bean
-  // public Consumer<OutGoingMessage> handleAuthorEvent() {
-    // return message -> log.info("*** author events: {}", message);
+  @Bean
+  public Consumer<OutGoingMessage> handleAuthorEvent() {
+    return message -> log.info("*** author events: {}", message);
     // return message -> {
     //   log.info("*** received message: {}", message);
     //   if (message.getEvent().equals("AuthorDeleted")) {
@@ -134,11 +138,11 @@ public class DefaultBookService implements BookService {
     //     booksWithDeletedAuthor.stream().forEach(book -> {
     //       book.deleteAuthor(new Author().setId(authorId));
     //       final BookUpdated bookUpdated = new BookUpdated(book);
-    //       streamBridge.send(topic, new OutGoingMessage(bookUpdated));
+    //       streamBridge.send(bookEventBinding, new OutGoingMessage(bookUpdated));
     //       publisher.publishEvent(bookUpdated);
     //     });
     //   }
     // };
-  // }
+  }
 }
 

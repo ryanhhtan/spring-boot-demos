@@ -7,12 +7,18 @@ spring:
     hibernate:
       ddl-auto: validate
   cloud.stream:
-    function:
-      bindings:
-        handleAuthorEvent-in-0: authorEvent
+    # function:
+    #   bindings:
+    #     handleAuthorEvent-in-0: authorEvent
+    source: sendBookEvent;handleAuthorEvent
     bindings:
-      authorEvent:
+      sendBookEvent-out-0:
+        destination: book-service-book-domain-events
+      handleAuthorEvent-in-0:
         destination: author-service-author-domain-events
+    kafka.binder.brokers:
+    - dev-kafka
+
 
 server.error.include-message: always
 management:

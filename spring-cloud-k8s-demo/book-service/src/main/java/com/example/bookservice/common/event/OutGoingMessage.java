@@ -1,12 +1,12 @@
 package com.example.bookservice.common.event;
 
 import java.time.Instant;
-import lombok.Getter;
+import lombok.Data;
 
 /**
  * OutGoingMessage
  */
-@Getter
+@Data
 public class OutGoingMessage {
   private String event;
   private Instant occuredAt;

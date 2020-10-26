@@ -8,8 +8,8 @@ spec:
       containers:
         - name: book-service
           readinessProbe:
-            initialDelaySeconds: 40
+            initialDelaySeconds: 50
             periodSeconds: 5
           livenessProbe:
-            initialDelaySeconds: 40
+            initialDelaySeconds: 50
             periodSeconds: 5
