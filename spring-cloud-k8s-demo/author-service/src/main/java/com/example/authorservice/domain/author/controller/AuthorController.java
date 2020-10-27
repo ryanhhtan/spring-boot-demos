@@ -60,6 +60,7 @@ public class AuthorController {
 	}
 
 	@DeleteMapping("/{id}")
+	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public void deleteById(@PathVariable(name = "id") final Long id) {
 		service.deleteById(new DeleteAuthorCommand(id));
 	}
