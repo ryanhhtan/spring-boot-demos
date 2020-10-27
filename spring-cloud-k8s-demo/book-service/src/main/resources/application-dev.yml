@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://prod-postgres/book_service
+    url: jdbc:postgresql://dev-postgres.default.svc.cluster.local/book_service
     username: postgres
     password: example 
   jpa:
@@ -10,6 +10,10 @@ spring:
     function:
       definition: handleAuthorEvent
     stream:
+      # function:
+      #   bindings:
+      #     handleAuthorEvent-in-0:
+      #       destination: author-service-author-domain-events
       source: sendBookEvent
       bindings:
         handleAuthorEvent-in-0:
@@ -17,14 +21,4 @@ spring:
         sendBookEvent-out-0:
           destination: book-service-book-domain-events
       kafka.binder.brokers:
-      - dev-kafka
-
-
-server.error.include-message: always
-management:
-  endpoints.web.exposure.include: '*'
-  server.port: 8081
-  endpoint.health.probes.enabled: true
-  health:
-    livenessState.enabled: true
-    readinessState.enabled: true
+      - dev-kafka.default.svc.cluster.local

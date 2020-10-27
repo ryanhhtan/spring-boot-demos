@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import com.example.bookservice.common.WithId;
-import com.example.bookservice.common.event.OutGoingMessage;
+import com.example.bookservice.common.event.DomainEventMessage;
 import com.example.bookservice.domain.author.model.Author;
 import com.example.bookservice.domain.author.resolver.AuthorResolver;
 import com.example.bookservice.domain.book.command.CreateBookCommand;
@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @Slf4j
 public class DefaultBookService implements BookService {
-  private static final String bookEventBinding = "sendBookEvent";
+  private static final String bookEventBinding = "sendBookEvent-out-0";
 
 	private final BookRepository repository;
 
@@ -69,7 +69,7 @@ public class DefaultBookService implements BookService {
 		}
 		final Book saved = repository.save(book);
     final BookCreated bookCreated = new BookCreated(saved);
-    streamBridge.send(bookEventBinding,new OutGoingMessage(bookCreated));
+    streamBridge.send(bookEventBinding,new DomainEventMessage(bookCreated));
     publisher.publishEvent(bookCreated);
 		return BookViewFactory.instance().createBookView(saved, actualAuthors);
 	}
@@ -109,7 +109,7 @@ public class DefaultBookService implements BookService {
 		}
 		final Book updated = repository.save(book);
     final BookUpdated bookUpdated = new BookUpdated(updated);
-    streamBridge.send(bookEventBinding,new OutGoingMessage(bookUpdated));
+    streamBridge.send(bookEventBinding,new DomainEventMessage(bookUpdated));
     publisher.publishEvent(bookUpdated);
 		return BookViewFactory.instance().createBookView(updated, actualAuthors);
 	}
@@ -119,7 +119,7 @@ public class DefaultBookService implements BookService {
     final Book book = repository.findById(command.getId()).orElseThrow(this::notFound);
 		repository.deleteById(command.getId());
     final BookDeleted bookDeleted = new BookDeleted(book);
-    streamBridge.send(bookEventBinding, new OutGoingMessage(bookDeleted));
+    streamBridge.send(bookEventBinding, new DomainEventMessage(bookDeleted));
     publisher.publishEvent(bookDeleted);
 	}
 
@@ -127,22 +127,18 @@ public class DefaultBookService implements BookService {
 		return new BookNotFoundException();
 	}
 
-  @Bean
-  public Consumer<OutGoingMessage> handleAuthorEvent() {
-    return message -> log.info("*** author events: {}", message);
-    // return message -> {
-    //   log.info("*** received message: {}", message);
-    //   if (message.getEvent().equals("AuthorDeleted")) {
-    //     final Long authorId = Long.valueOf(message.getId());
-    //     final List<Book> booksWithDeletedAuthor = repository.findByAuthorId(authorId);
-    //     booksWithDeletedAuthor.stream().forEach(book -> {
-    //       book.deleteAuthor(new Author().setId(authorId));
-    //       final BookUpdated bookUpdated = new BookUpdated(book);
-    //       streamBridge.send(bookEventBinding, new OutGoingMessage(bookUpdated));
-    //       publisher.publishEvent(bookUpdated);
-    //     });
-    //   }
-    // };
+	@Override
+  public void removeInvalidAuthorFromBooks(final Long authorId) {
+      log.info("*** deleted authorId: {}", authorId);
+    final List<Book> booksWithDeletedAuthor = repository.findByAuthorId(authorId);
+    booksWithDeletedAuthor.stream().forEach(book -> {
+      log.info("*** affected book: {}", book);
+      book.deleteAuthor(new Author().setId(authorId));
+      final BookUpdated bookUpdated = new BookUpdated(book);
+      streamBridge.send(bookEventBinding, new DomainEventMessage(bookUpdated));
+      publisher.publishEvent(bookUpdated);
+      log.info("*** finished. author.size: {}", book.getAuthorRefs().size());
+    });
   }
 }
 

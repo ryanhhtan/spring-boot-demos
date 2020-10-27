@@ -16,4 +16,5 @@ public interface BookService {
 	public BookView findById(final Long id) throws Exception;
 	public BookView updateBook(UpdateBookCommand command) throws Exception;
 	public void deleteBook(DeleteBookCommand command);
+  public void removeInvalidAuthorFromBooks(final Long authorId);
 }
